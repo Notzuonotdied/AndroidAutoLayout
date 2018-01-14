@@ -3,13 +3,11 @@
 
 >目前没有精力，已停止维护，使用前务必看明白代码，明确该方案可以解决自身问题，有扩展代码能力，否则不建议使用。
 
-非常感谢 ： 吃土豆的人 的协作。
+非常感谢 ： **吃土豆的人** 的协作。
 
 ## 效果图
 
 最大幅度解决适配问题，并且最大化方便开发者。
-
-
 
 so,看下用法：
 
@@ -22,15 +20,13 @@ so,看下用法：
 
 ok，拿一些实际项目的页面，看下不同分辨率下的效果：
 
-左为：768 * 1280 ; 右为：1080 * 1920
+左为：`768 * 1280` ; 右为：`1080 * 1920`
 
 <img src="preview/preview_01.png" width="800px"/>
 
 <img src="preview/preview_02.png" width="800px"/>
 
 <img src="preview/preview_03.png" width="800px"/>
-
-
 
 上述两个机器的分辨率差距挺大了，但是完美实现了适配，最为重要的是：
 
@@ -49,7 +45,7 @@ ok，拿一些实际项目的页面，看下不同分辨率下的效果：
 
 将[autolayout](autolayout)引入
 
-```xml
+``` gradle
 dependencies {
     compile project(':autolayout')
 }
@@ -57,7 +53,7 @@ dependencies {
 
 也可以直接
 
-```
+``` gradle
 dependencies {
     compile 'com.zhy:autolayout:1.4.5'
 }
@@ -94,39 +90,39 @@ dependencies {
 
 如果你不希望继承`AutoLayoutActivity`，可以在编写布局文件时，将
 
-* LinearLayout -> AutoLinearLayout
-* RelativeLayout -> AutoRelativeLayout
-* FrameLayout -> AutoFrameLayout
+* `LinearLayout` -> `AutoLinearLayout`
+* `RelativeLayout` -> `AutoRelativeLayout`
+* `FrameLayout` -> `AutoFrameLayout`
 
 这样也可以完成适配。
 
 ## 目前支持属性
 
-* layout_width
-* layout_height
-* layout_margin(left,top,right,bottom)
-* pading(left,top,right,bottom)
-* textSize
-* maxWidth, minWidth, maxHeight, minHeight
+* `layout_width`
+* `layout_height`
+* `layout_margin(left,top,right,bottom)`
+* `pading(left,top,right,bottom)`
+* `textSize`
+* `maxWidth, minWidth, maxHeight, minHeight`
 
 
 ## 配置
 
 默认使用的高度是设备的可用高度，也就是不包括状态栏和底部的操作栏的，如果你希望拿设备的物理高度进行百分比化：
 
-可以在Application的onCreate方法中进行设置:
+可以在`Application`的`onCreate`方法中进行设置:
 
 ```java
-public class UseDeviceSizeApplication extends Application
-{
+/**
+ * Created by zhy on 15/12/23.
+ */
+public class UseDeviceSizeApplication extends Application {
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
-        AutoLayoutConifg.getInstance().useDeviceSize();
+        AutoLayoutConfig.getInstance().useDeviceSize().init(this);
     }
 }
-
 ```
 
 ## 预览
@@ -151,57 +147,39 @@ public class UseDeviceSizeApplication extends Application
 
 ## 扩展
 
-对于其他继承系统的FrameLayout、LinearLayout、RelativeLayout的控件，比如`CardView`，如果希望再其内部直接支持"px"百分比化，可以自己扩展，扩展方式为下面的代码，也可参考[issue#21](https://github.com/hongyangAndroid/AndroidAutoLayout/issues/21)：
+对于其他继承系统的`FrameLayout`、`LinearLayout`、`RelativeLayout`的控件，比如`CardView`，如果希望再其内部直接支持"`px`"百分比化，可以自己扩展，扩展方式为下面的代码，也可参考[issue#21](https://github.com/hongyangAndroid/AndroidAutoLayout/issues/21)：
 
-```
-package com.zhy.sample.view;
-
-import android.content.Context;
-import android.support.v7.widget.CardView;
-import android.util.AttributeSet;
-
-import com.zhy.autolayout.AutoFrameLayout;
-import com.zhy.autolayout.utils.AutoLayoutHelper;
-
+``` java
 /**
  * Created by zhy on 15/12/8.
  */
-public class AutoCardView extends CardView
-{
+public class AutoCardView extends CardView {
     private final AutoLayoutHelper mHelper = new AutoLayoutHelper(this);
 
-    public AutoCardView(Context context)
-    {
+    public AutoCardView(Context context) {
         super(context);
     }
 
-    public AutoCardView(Context context, AttributeSet attrs)
-    {
+    public AutoCardView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AutoCardView(Context context, AttributeSet attrs, int defStyleAttr)
-    {
+    public AutoCardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
-    public AutoFrameLayout.LayoutParams generateLayoutParams(AttributeSet attrs)
-    {
+    public AutoFrameLayout.LayoutParams generateLayoutParams(AttributeSet attrs) {
         return new AutoFrameLayout.LayoutParams(getContext(), attrs);
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
-        if (!isInEditMode())
-        {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (!isInEditMode()) {
             mHelper.adjustChildren();
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
-
-
 }
 ```
 
@@ -218,18 +196,15 @@ public class AutoCardView extends CardView
 
 ```java
 @Override
-public View getView(int position, View convertView, ViewGroup parent)
-{
+public View getView(int position, View convertView, ViewGroup parent) {
     ViewHolder holder = null;
-    if (convertView == null)
-    {
+    if (convertView == null) {
         holder = new ViewHolder();
         convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
         convertView.setTag(holder);
         //对于listview，注意添加这一行，即可在item上使用高度
         AutoUtils.autoSize(convertView);
-    } else
-    {
+    } else {
         holder = (ViewHolder) convertView.getTag();
     }
 
@@ -237,22 +212,20 @@ public View getView(int position, View convertView, ViewGroup parent)
 }
 ```
 
-注意` AutoUtils.autoSize(convertView);`这行代码的位置即可。demo中也有相关实例。
+**注意：**` AutoUtils.autoSize(convertView);`这行代码的位置即可。demo中也有相关实例。
 
 
 * 对于RecyclerView
 
 ```java
-public ViewHolder(View itemView)
-{
+public ViewHolder(View itemView) {
       super(itemView);
       AutoUtils.autoSize(itemView);
 }
 
 //...
 @Override
-public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-{
+public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
      View convertView = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, parent, false);
      return new ViewHolder(convertView);
 }
@@ -264,17 +237,18 @@ public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
 
 ### 指定设置的值参考宽度或者高度
 
-由于该库的特点，布局文件中宽高上的1px是不相等的，于是如果需要宽高保持一致的情况，布局中使用属性：
+由于该库的特点，布局文件中宽高上的1px是不相等的，于是如果需要宽高保持一致的情况，布局中使用属性:
 
- `app:layout_auto_basewidth="height"`，代表height上编写的像素值参考宽度。
- 
- `app:layout_auto_baseheight="width"`，代表width上编写的像素值参考高度。
+ - `app:layout_auto_basewidth="height"`，代表height上编写的像素值参考宽度。
+ - `app:layout_auto_baseheight="width"`，代表width上编写的像素值参考高度。
 
 如果需要指定多个值参考宽度即：
 
-`app:layout_auto_basewidth="height|padding"`
+``` java
+app:layout_auto_basewidth="height|padding"
+```
 
-用|隔开，类似gravity的用法，取值为：
+用“|”隔开，类似gravity的用法，取值为：
 
 * width,height
 * margin,marginLeft,marginTop,marginRight,marginBottom
@@ -288,11 +262,11 @@ public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
 
 ## 常见问题
 
-###(1)导入后出现`org/gradle/api/publication/maven/internal/DefaultMavenFactory`
+### (1)导入后出现`org/gradle/api/publication/maven/internal/DefaultMavenFactory`
 
 最简单的方式，通过`compile 'com.zhy:autolayout:x.x.x'`进行依赖使用，如果一定要以module引用，参考该issue[#74](https://github.com/hongyangAndroid/AndroidAutoLayout/issues/74)
 
-###(2)RadioGroup,Toolbar等控件中的子View无法完成适配
+### (2)RadioGroup,Toolbar等控件中的子View无法完成适配
 
 这个其实上文已经提到过了，需要自己扩展。不过这个很多使用者贡献了他们的扩展类可以直接使用，
 参考[autolayout-widget](https://github.com/hongyangAndroid/AndroidAutoLayout/tree/master/widgetsample),
@@ -300,7 +274,7 @@ public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
 `autolayout-widget`中方便他人，ps:需要用到哪个copy就好了，不要直接引用`autolayout-widget`，因为其引用了大量的库，可能很多
 库你是用不到的。
 
-###(3)java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity.
+### (3)java.lang.IllegalStateException: You need to use a Theme.AppCompat theme (or descendant) with this activity.
 
 这个问题是因为默认AutoLayoutActivity会继承自AppCompatActivity，所以默认需要设置
 Theme.AppCompat的theme；
@@ -312,25 +286,15 @@ Theme.AppCompat的theme；
 
 ps：还是建议尽快更新SDK版本使用`AppCompatActivity`.
 
-
-
 ## 其他信息
 
-作者信息：
+### 作者信息
 
 * [hongyangAndroid](https://github.com/hongyangAndroid)
 * 吃土豆的人
 
-
-灵感来自：
+### 灵感来自
 
 * [android-percent-support-lib-sample](https://github.com/JulienGenoud/android-percent-support-lib-sample)
 * [android-percent-support-extend](https://github.com/hongyangAndroid/android-percent-support-extend)
 * [Android 屏幕适配方案](http://blog.csdn.net/lmj623565791/article/details/45460089)
-
-
-
-
-
-
-

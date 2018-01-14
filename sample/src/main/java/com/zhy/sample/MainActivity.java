@@ -46,7 +46,7 @@ public class MainActivity extends AutoLayoutActivity {
     }
 
     private void initDatas() {
-        ArrayList<Fragment> mList = new ArrayList<Fragment>();
+        ArrayList<Fragment> mList = new ArrayList<>();
         mList.add(new ListFragment());
         mList.add(new RegisterFragment());
         mList.add(new PayFragment());

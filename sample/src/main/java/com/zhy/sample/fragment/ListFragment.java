@@ -81,10 +81,8 @@ public class ListFragment extends Fragment {
                 holder = new ViewHolder();
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
                 convertView.setTag(holder);
-                //对于listview，注意添加这一行，即可在item上使用高度
+                // 对于listview，注意添加这一行，即可在item上使用高度
                 AutoUtils.autoSize(convertView);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
             }
 
             return convertView;

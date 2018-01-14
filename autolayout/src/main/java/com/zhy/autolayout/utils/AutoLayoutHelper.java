@@ -41,35 +41,28 @@ import com.zhy.autolayout.attr.PaddingRightAttr;
 import com.zhy.autolayout.attr.PaddingTopAttr;
 import com.zhy.autolayout.attr.TextSizeAttr;
 import com.zhy.autolayout.attr.WidthAttr;
-import com.zhy.autolayout.config.AutoLayoutConifg;
+import com.zhy.autolayout.config.AutoLayoutConfig;
 
-public class AutoLayoutHelper
-{
-    private final ViewGroup mHost;
-
-    private static final int[] LL = new int[]
-            { //
-                    android.R.attr.textSize,
-                    android.R.attr.padding,//
-                    android.R.attr.paddingLeft,//
-                    android.R.attr.paddingTop,//
-                    android.R.attr.paddingRight,//
-                    android.R.attr.paddingBottom,//
-                    android.R.attr.layout_width,//
-                    android.R.attr.layout_height,//
-                    android.R.attr.layout_margin,//
-                    android.R.attr.layout_marginLeft,//
-                    android.R.attr.layout_marginTop,//
-                    android.R.attr.layout_marginRight,//
-                    android.R.attr.layout_marginBottom,//
-                    android.R.attr.maxWidth,//
-                    android.R.attr.maxHeight,//
-                    android.R.attr.minWidth,//
-                    android.R.attr.minHeight,//16843072
-
-
-            };
-
+public class AutoLayoutHelper {
+    private static final int[] LL = new int[]{
+            android.R.attr.textSize,
+            android.R.attr.padding,
+            android.R.attr.paddingLeft,
+            android.R.attr.paddingTop,
+            android.R.attr.paddingRight,
+            android.R.attr.paddingBottom,
+            android.R.attr.layout_width,
+            android.R.attr.layout_height,
+            android.R.attr.layout_margin,
+            android.R.attr.layout_marginLeft,
+            android.R.attr.layout_marginTop,
+            android.R.attr.layout_marginRight,
+            android.R.attr.layout_marginBottom,
+            android.R.attr.maxWidth,
+            android.R.attr.maxHeight,
+            android.R.attr.minWidth,
+            android.R.attr.minHeight,
+    };
     private static final int INDEX_TEXT_SIZE = 0;
     private static final int INDEX_PADDING = 1;
     private static final int INDEX_PADDING_LEFT = 2;
@@ -87,56 +80,23 @@ public class AutoLayoutHelper
     private static final int INDEX_MAX_HEIGHT = 14;
     private static final int INDEX_MIN_WIDTH = 15;
     private static final int INDEX_MIN_HEIGHT = 16;
-
-
     /**
      * move to other place?
      */
-    private static AutoLayoutConifg mAutoLayoutConifg;
+    private static AutoLayoutConfig mAutoLayoutConifg;
+    private final ViewGroup mHost;
 
-    public AutoLayoutHelper(ViewGroup host)
-    {
+    public AutoLayoutHelper(ViewGroup host) {
         mHost = host;
 
-        if (mAutoLayoutConifg == null)
-        {
+        if (mAutoLayoutConifg == null) {
             initAutoLayoutConfig(host);
         }
 
     }
 
-    private void initAutoLayoutConfig(ViewGroup host)
-    {
-        mAutoLayoutConifg = AutoLayoutConifg.getInstance();
-        mAutoLayoutConifg.init(host.getContext());
-    }
-
-
-    public void adjustChildren()
-    {
-        AutoLayoutConifg.getInstance().checkParams();
-
-        for (int i = 0, n = mHost.getChildCount(); i < n; i++)
-        {
-            View view = mHost.getChildAt(i);
-            ViewGroup.LayoutParams params = view.getLayoutParams();
-
-            if (params instanceof AutoLayoutParams)
-            {
-                AutoLayoutInfo info =
-                        ((AutoLayoutParams) params).getAutoLayoutInfo();
-                if (info != null)
-                {
-                    info.fillAttrs(view);
-                }
-            }
-        }
-
-    }
-
     public static AutoLayoutInfo getAutoLayoutInfo(Context context,
-                                                   AttributeSet attrs)
-    {
+                                                   AttributeSet attrs) {
 
         AutoLayoutInfo info = new AutoLayoutInfo();
 
@@ -150,24 +110,23 @@ public class AutoLayoutHelper
         int n = array.getIndexCount();
 
 
-        for (int i = 0; i < n; i++)
-        {
+        for (int i = 0; i < n; i++) {
             int index = array.getIndex(i);
 //            String val = array.getString(index);
 //            if (!isPxVal(val)) continue;
 
-            if (!DimenUtils.isPxVal(array.peekValue(index))) continue;
+            if (!DimenUtils.isPxVal(array.peekValue(index))) {
+                continue;
+            }
 
-            int pxVal = 0;
-            try
-            {
+            int pxVal;
+            try {
                 pxVal = array.getDimensionPixelOffset(index, 0);
-            } catch (Exception ignore)//not dimension
+            } catch (Exception ignore)// not dimension
             {
                 continue;
             }
-            switch (index)
-            {
+            switch (index) {
                 case INDEX_TEXT_SIZE:
                     info.addAttr(new TextSizeAttr(pxVal, baseWidth, baseHeight));
                     break;
@@ -219,6 +178,8 @@ public class AutoLayoutHelper
                 case INDEX_MIN_HEIGHT:
                     info.addAttr(new MinHeightAttr(pxVal, baseWidth, baseHeight));
                     break;
+                default:
+                    break;
             }
         }
         array.recycle();
@@ -226,8 +187,30 @@ public class AutoLayoutHelper
         return info;
     }
 
-    public interface AutoLayoutParams
-    {
+    private void initAutoLayoutConfig(ViewGroup host) {
+        mAutoLayoutConifg = AutoLayoutConfig.getInstance();
+        mAutoLayoutConifg.init(host.getContext());
+    }
+
+    public void adjustChildren() {
+        AutoLayoutConfig.getInstance().checkParams();
+
+        for (int i = 0, n = mHost.getChildCount(); i < n; i++) {
+            View view = mHost.getChildAt(i);
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+
+            if (params instanceof AutoLayoutParams) {
+                AutoLayoutInfo info =
+                        ((AutoLayoutParams) params).getAutoLayoutInfo();
+                if (info != null) {
+                    info.fillAttrs(view);
+                }
+            }
+        }
+
+    }
+
+    public interface AutoLayoutParams {
         AutoLayoutInfo getAutoLayoutInfo();
     }
 }

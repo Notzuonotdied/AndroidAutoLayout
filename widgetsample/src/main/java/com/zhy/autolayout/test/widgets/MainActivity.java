@@ -16,17 +16,16 @@ public class MainActivity extends AutoLayoutWidgetActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("标题");
         setSupportActionBar(toolbar);
-        mTabLayout = (TabLayout) findViewById(R.id.id_tablayout);
-        mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
+        mTabLayout = findViewById(R.id.id_tablayout);
+        mViewPager = findViewById(R.id.id_viewpager);
 
         mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override

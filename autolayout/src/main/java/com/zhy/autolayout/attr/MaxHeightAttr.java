@@ -7,42 +7,14 @@ import java.lang.reflect.Method;
 /**
  * Created by zhy on 15/12/24.
  */
-public class MaxHeightAttr extends AutoAttr
-{
-    public MaxHeightAttr(int pxVal, int baseWidth, int baseHeight)
-    {
+public class MaxHeightAttr extends AutoAttr {
+    public MaxHeightAttr(int pxVal, int baseWidth, int baseHeight) {
         super(pxVal, baseWidth, baseHeight);
     }
 
-    @Override
-    protected int attrVal()
-    {
-        return Attrs.MAX_HEIGHT;
-    }
-
-    @Override
-    protected boolean defaultBaseWidth()
-    {
-        return false;
-    }
-
-    @Override
-    protected void execute(View view, int val)
-    {
-        try
-        {
-            Method setMaxWidthMethod = view.getClass().getMethod("setMaxHeight", int.class);
-            setMaxWidthMethod.invoke(view, val);
-        } catch (Exception ignore)
-        {
-        }
-    }
-
-    public static MaxHeightAttr generate(int val, int baseFlag)
-    {
+    public static MaxHeightAttr generate(int val, int baseFlag) {
         MaxHeightAttr attr = null;
-        switch (baseFlag)
-        {
+        switch (baseFlag) {
             case AutoAttr.BASE_WIDTH:
                 attr = new MaxHeightAttr(val, Attrs.MAX_HEIGHT, 0);
                 break;
@@ -52,19 +24,37 @@ public class MaxHeightAttr extends AutoAttr
             case AutoAttr.BASE_DEFAULT:
                 attr = new MaxHeightAttr(val, 0, 0);
                 break;
+            default:
+                break;
         }
         return attr;
     }
 
-    public static int getMaxHeight(View view)
-    {
-        try
-        {
+    public static int getMaxHeight(View view) {
+        try {
             Method setMaxWidthMethod = view.getClass().getMethod("getMaxHeight");
             return (int) setMaxWidthMethod.invoke(view);
-        } catch (Exception ignore)
-        {
+        } catch (Exception ignore) {
         }
         return 0;
+    }
+
+    @Override
+    protected int attrVal() {
+        return Attrs.MAX_HEIGHT;
+    }
+
+    @Override
+    protected boolean defaultBaseWidth() {
+        return false;
+    }
+
+    @Override
+    protected void execute(View view, int val) {
+        try {
+            Method setMaxWidthMethod = view.getClass().getMethod("setMaxHeight", int.class);
+            setMaxWidthMethod.invoke(view, val);
+        } catch (Exception ignore) {
+        }
     }
 }

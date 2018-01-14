@@ -23,14 +23,11 @@ import android.view.View;
  */
 public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
+    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     private static final int[] ATTRS = new int[]{
             android.R.attr.listDivider
     };
-
-    public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
-
-    public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
-
     private Drawable mDivider;
 
     private int mOrientation;
@@ -51,7 +48,7 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent) {
-        Log.v("recyclerview - itemdecoration", "onDraw()");
+        Log.v("recyclerView", "onDraw()");
 
         if (mOrientation == VERTICAL_LIST) {
             drawVertical(c, parent);
@@ -60,7 +57,6 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
         }
 
     }
-
 
     public void drawVertical(Canvas c, RecyclerView parent) {
         final int left = parent.getPaddingLeft();

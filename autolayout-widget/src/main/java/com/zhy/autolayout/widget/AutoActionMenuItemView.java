@@ -1,12 +1,11 @@
 package com.zhy.autolayout.widget;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-
 import android.support.v7.view.menu.ActionMenuItemView;
 import android.util.AttributeSet;
 import android.util.TypedValue;
-
 
 import com.zhy.autolayout.utils.AutoUtils;
 import com.zhy.autolayout.utils.DimenUtils;
@@ -26,16 +25,18 @@ public class AutoActionMenuItemView extends ActionMenuItemView {
         this(context, attrs, 0);
     }
 
+    @SuppressLint("RestrictedApi")
     public AutoActionMenuItemView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.Theme,
+        TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.AppCompatTheme,
                 defStyle, R.style.ThemeOverlay_AppCompat);
-        int menuTextAppearance = a.getResourceId(R.styleable.Theme_actionBarTheme,
+        int menuTextAppearance = a.getResourceId(R.styleable.AppCompatTheme_actionBarTheme,
                 R.style.ThemeOverlay_AppCompat_ActionBar);
         mMenuTextSize = loadTextSizeFromTextAppearance(menuTextAppearance);
         a.recycle();
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (!this.isInEditMode()) {
@@ -48,8 +49,9 @@ public class AutoActionMenuItemView extends ActionMenuItemView {
         TypedArray a = getContext().obtainStyledAttributes(textAppearanceResId,
                 R.styleable.TextAppearance);
         try {
-            if (!DimenUtils.isPxVal(a.peekValue(R.styleable.TextAppearance_android_textSize)))
+            if (!DimenUtils.isPxVal(a.peekValue(R.styleable.TextAppearance_android_textSize))) {
                 return NO_VALID;
+            }
             return a.getDimensionPixelSize(R.styleable.TextAppearance_android_textSize, NO_VALID);
         } finally {
             a.recycle();
@@ -57,7 +59,9 @@ public class AutoActionMenuItemView extends ActionMenuItemView {
     }
 
     private void setUpTitleTextSize() {
-        if (mMenuTextSize == -1) return;
+        if (mMenuTextSize == -1) {
+            return;
+        }
         int autoTextSize = AutoUtils.getPercentHeightSize(mMenuTextSize);
         setTextSize(TypedValue.COMPLEX_UNIT_PX, autoTextSize);
     }

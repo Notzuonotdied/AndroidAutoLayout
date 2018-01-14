@@ -10,50 +10,38 @@ import android.support.v4.view.ViewPager;
 import com.zhy.autolayout.AutoLayoutActivity;
 import com.zhy.sample.fragment.SimpleFragment;
 
-public class CategoryActivity extends AutoLayoutActivity
-{
+public class CategoryActivity extends AutoLayoutActivity {
 
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-
-    private String[] mTabTitles = new String[]
-            {"单个UI", "正方形"};
+    private String[] mTabTitles = new String[]{"单个UI", "正方形"};
 
 
     @Override
-    public Context getBaseContext()
-    {
+    public Context getBaseContext() {
         return super.getBaseContext();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+        
+        TabLayout mTabLayout = findViewById(R.id.id_tablayout);
+        ViewPager mViewPager = findViewById(R.id.id_viewpager);
 
-
-        mTabLayout = (TabLayout) findViewById(R.id.id_tablayout);
-        mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
-
-        mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager())
-        {
+        mViewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
-            public Fragment getItem(int i)
-            {
+            public Fragment getItem(int i) {
                 return new SimpleFragment();
             }
 
             @Override
-            public CharSequence getPageTitle(int position)
-            {
+            public CharSequence getPageTitle(int position) {
 
                 return mTabTitles[position];
             }
 
             @Override
-            public int getCount()
-            {
+            public int getCount() {
                 return mTabTitles.length;
             }
         });

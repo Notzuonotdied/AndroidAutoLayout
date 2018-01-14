@@ -20,73 +20,71 @@ import com.zhy.sample.fragment.TestFragment;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AutoLayoutActivity
-{
+public class MainActivity extends AutoLayoutActivity {
 
-	private ViewPager mViewPager;
+    private ViewPager mViewPager;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setImmersionStatus();
-		setContentView(R.layout.activity_main);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setImmersionStatus();
+        setContentView(R.layout.activity_main);
 
 
-		initView();
-		initDatas();
-	}
+        initView();
+        initDatas();
+    }
 
-	private void setImmersionStatus() {
-		if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
-			// 透明状态栏
-			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-			// 透明导航栏
+    private void setImmersionStatus() {
+        if (VERSION.SDK_INT >= VERSION_CODES.KITKAT) {
+            // 透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // 透明导航栏
 //			getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-		}
-	}
+        }
+    }
 
-	private void initDatas() {
-		ArrayList<Fragment> mList = new ArrayList<Fragment>();
-		mList.add(new ListFragment());
-		mList.add(new RegisterFragment());
-		mList.add(new PayFragment());
-		mList.add(new RecyclerViewFragment());
-		mList.add(new RecyclerViewGridFragment());
-		mList.add(new TestFragment());
-		mViewPager.setAdapter(new MyAdapter(getSupportFragmentManager(), mList));
-	}
+    private void initDatas() {
+        ArrayList<Fragment> mList = new ArrayList<Fragment>();
+        mList.add(new ListFragment());
+        mList.add(new RegisterFragment());
+        mList.add(new PayFragment());
+        mList.add(new RecyclerViewFragment());
+        mList.add(new RecyclerViewGridFragment());
+        mList.add(new TestFragment());
+        mViewPager.setAdapter(new MyAdapter(getSupportFragmentManager(), mList));
+    }
 
-	private void initView() {
-		mViewPager = (ViewPager) findViewById(R.id.id_viewpager);
-	}
+    private void initView() {
+        mViewPager = findViewById(R.id.id_viewpager);
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
 
-	public class MyAdapter extends FragmentPagerAdapter {
-		ArrayList<Fragment> tabs = null;
+    public class MyAdapter extends FragmentPagerAdapter {
+        ArrayList<Fragment> tabs = null;
 
-		public MyAdapter(FragmentManager fm, ArrayList<Fragment> tabs) {
-			super(fm);
-			this.tabs = tabs;
-		}
+        public MyAdapter(FragmentManager fm, ArrayList<Fragment> tabs) {
+            super(fm);
+            this.tabs = tabs;
+        }
 
-		@Override
-		public Fragment getItem(int pos) {
-			return tabs.get(pos);
-		}
+        @Override
+        public Fragment getItem(int pos) {
+            return tabs.get(pos);
+        }
 
-		@Override
-		public int getCount() {
-			return tabs.size();
-		}
-	}
+        @Override
+        public int getCount() {
+            return tabs.size();
+        }
+    }
 
 }
